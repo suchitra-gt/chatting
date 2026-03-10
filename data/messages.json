@@ -1,0 +1,18 @@
+[
+  {
+    "id": "msg_1773143294491",
+    "senderId": "usr_1773142295522",
+    "senderName": "halesh",
+    "recipientId": "usr_1773142686222",
+    "text": "hloo rohan ",
+    "time": "05:18 PM"
+  },
+  {
+    "id": "msg_1773143389611",
+    "senderId": "usr_1773142686222",
+    "senderName": "rohan",
+    "recipientId": "usr_1773142295522",
+    "text": "hloo halesh",
+    "time": "05:19 PM"
+  }
+]
