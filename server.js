@@ -17,9 +17,16 @@ if (!fs.existsSync(USERS_FILE)) fs.writeFileSync(USERS_FILE, JSON.stringify([]))
 if (!fs.existsSync(MESSAGES_FILE)) fs.writeFileSync(MESSAGES_FILE, JSON.stringify([]));
 
 app.use(express.json());
+app.use((req, res, next) => {
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+    next();
+});
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/api/health', (req, res) => res.send('Nebula API is Live!'));
+app.get('/api/health', (req, res) => {
+    console.log('Health check requested');
+    res.send('Nebula API is Live!');
+});
 
 // API Routes
 app.post('/api/register', (req, res) => {
