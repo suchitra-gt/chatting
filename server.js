@@ -9,6 +9,18 @@ const DATA_DIR = path.join(__dirname, 'data');
 const USERS_FILE = path.join(DATA_DIR, 'users.json');
 const MESSAGES_FILE = path.join(DATA_DIR, 'messages.json');
 
+// Helper to read JSON safely
+const readJSON = (file) => {
+    try {
+        if (!fs.existsSync(file)) return [];
+        const content = fs.readFileSync(file, 'utf8');
+        return content ? JSON.parse(content) : [];
+    } catch (e) {
+        console.error(`Error reading ${file}:`, e);
+        return [];
+    }
+};
+
 // Ensure directories and JSON files exist
 if (!fs.existsSync(DATA_DIR)) {
     fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -34,7 +46,7 @@ app.post('/api/register', (req, res) => {
     if (!data.username || !data.password || !data.email || !data.phone) {
         return res.status(400).json({ error: 'Please provide username, email, phone, and password' });
     }
-    const users = JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
+    const users = readJSON(USERS_FILE);
     if (users.find(u => u.username === data.username || u.email === data.email)) {
         return res.status(400).json({ error: 'Username or email already taken' });
     }
@@ -55,7 +67,7 @@ app.post('/api/login', (req, res) => {
     if (!data.identifier || !data.password) {
         return res.status(400).json({ error: 'Please provide username/email and password' });
     }
-    const users = JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
+    const users = readJSON(USERS_FILE);
     const user = users.find(u =>
         (u.username === data.identifier || u.email === data.identifier) &&
         u.password === data.password
@@ -67,7 +79,7 @@ app.post('/api/login', (req, res) => {
 });
 
 app.get('/api/messages', (req, res) => {
-    const messages = JSON.parse(fs.readFileSync(MESSAGES_FILE, 'utf8'));
+    const messages = readJSON(MESSAGES_FILE);
     res.status(200).json(messages);
 });
 
@@ -76,7 +88,7 @@ app.post('/api/messages', (req, res) => {
     if (!data.senderId || !data.text || !data.recipientId) {
         return res.status(400).json({ error: 'Invalid message data' });
     }
-    const messages = JSON.parse(fs.readFileSync(MESSAGES_FILE, 'utf8'));
+    const messages = readJSON(MESSAGES_FILE);
     const newMsg = {
         id: `msg_${Date.now()}`,
         senderId: data.senderId,
@@ -92,7 +104,7 @@ app.post('/api/messages', (req, res) => {
 
 app.get('/api/users', (req, res) => {
     try {
-        const users = JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
+        const users = readJSON(USERS_FILE);
         const safeUsers = users.map(u => ({
             id: u.id,
             username: u.username,
@@ -125,6 +137,20 @@ app.get('*', (req, res) => {
     }
 });
 
+// Error Handler - Catch all server errors and return JSON
+app.use((err, req, res, next) => {
+    console.error('❌ SERVER ERROR:', err);
+    if (res.headersSent) {
+        return next(err);
+    }
+    res.status(500).json({ 
+        error: 'Internal Server Error', 
+        message: err.message,
+        stack: process.env.NODE_ENV === 'development' ? err.stack : undefined 
+    });
+});
+
 app.listen(PORT, () => {
     console.log(`\n🚀 Server running at: http://localhost:${PORT}/`);
+    console.log(`📁 Data directory: ${DATA_DIR}`);
 });
