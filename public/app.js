@@ -46,11 +46,12 @@ function App() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ identifier, password })
             });
+            const clone = res.clone();
             let data;
             try {
                 data = await res.json();
             } catch (err) {
-                const text = await res.text();
+                const text = await clone.text();
                 throw new Error(`Server Error (Raw): ${text || 'Empty Response'}`);
             }
             if (!res.ok) throw new Error(data.error || 'Login failed');
@@ -74,11 +75,12 @@ function App() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, email, phone, password })
             });
+            const clone = res.clone();
             let data;
             try {
                 data = await res.json();
             } catch (err) {
-                const text = await res.text();
+                const text = await clone.text();
                 throw new Error(`Server Error (Raw): ${text || 'Empty Response'}`);
             }
             if (!res.ok) throw new Error(data.error || 'Registration failed');
