@@ -2,12 +2,12 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const PORT = 5000;
-const USERS_FILE = path.join(__dirname, 'data', 'users.json');
-const MESSAGES_FILE = path.join(__dirname, 'data', 'messages.json');
+const PORT = process.env.PORT || 5000;
+const DATA_DIR = path.join(__dirname, 'data');
+const USERS_FILE = path.join(DATA_DIR, 'users.json');
+const MESSAGES_FILE = path.join(DATA_DIR, 'messages.json');
 
 // Ensure directories and JSON files exist
-const DATA_DIR = path.join(__dirname, 'data');
 if (!fs.existsSync(DATA_DIR)) {
     fs.mkdirSync(DATA_DIR, { recursive: true });
 }

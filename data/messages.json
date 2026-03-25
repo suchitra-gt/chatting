@@ -14,5 +14,29 @@
     "recipientId": "usr_1773142295522",
     "text": "hloo halesh",
     "time": "05:19 PM"
+  },
+  {
+    "id": "msg_1773144024270",
+    "senderId": "usr_1773142686222",
+    "senderName": "rohan",
+    "recipientId": "usr_1773142295522",
+    "text": "ow are you",
+    "time": "05:30 PM"
+  },
+  {
+    "id": "msg_1773144037308",
+    "senderId": "usr_1773142295522",
+    "senderName": "halesh",
+    "recipientId": "usr_1773142686222",
+    "text": "fine how are you ",
+    "time": "05:30 PM"
+  },
+  {
+    "id": "msg_1773144046961",
+    "senderId": "usr_1773142686222",
+    "senderName": "rohan",
+    "recipientId": "usr_1773142295522",
+    "text": "fine ",
+    "time": "05:30 PM"
   }
 ]
