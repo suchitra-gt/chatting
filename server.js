@@ -129,10 +129,8 @@ const server = http.createServer((req, res) => {
     }
 
     // Static files
-    let filePath = './public' + req.url;
-    if (filePath === './public/') {
-        filePath = './public/index.html';
-    }
+    let relativePath = req.url === '/' ? '/index.html' : req.url;
+    let filePath = path.join(__dirname, 'public', relativePath);
 
     const extname = String(path.extname(filePath)).toLowerCase();
     const contentType = MIME_TYPES[extname] || 'application/octet-stream';
