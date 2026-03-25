@@ -19,6 +19,8 @@ if (!fs.existsSync(MESSAGES_FILE)) fs.writeFileSync(MESSAGES_FILE, JSON.stringif
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.get('/api/health', (req, res) => res.send('Nebula API is Live!'));
+
 // API Routes
 app.post('/api/register', (req, res) => {
     const data = req.body;
