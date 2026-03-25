@@ -42,8 +42,14 @@ app.get('/api/health', (req, res) => {
 
 // API Routes
 app.post('/api/register', (req, res) => {
+    console.log('📝 REGISTER HEADERS:', req.headers);
     const data = req.body;
     console.log('📝 REGISTER ATTEMPT:', data);
+    
+    if (!data || typeof data !== 'object') {
+        return res.status(400).json({ error: 'Invalid or missing request body. Ensure Content-Type is application/json' });
+    }
+
     if (!data.username || !data.password || !data.email || !data.phone) {
         return res.status(400).json({ error: 'Please provide username, email, phone, and password' });
     }
