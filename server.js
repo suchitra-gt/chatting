@@ -105,19 +105,23 @@ app.get('/api/users', (req, res) => {
     }
 });
 
-// API 404 Handler - Ensure /api requests return JSON, not HTML
+// API Error Handler - Ensure all /api requests return JSON, not HTML
 app.all('/api/*', (req, res) => {
-    console.log(`404 API Error: ${req.method} ${req.url}`);
-    res.status(404).json({ error: `API Route ${req.method} ${req.url} not found` });
+    console.log(`🚨 API ERROR: ${req.method} ${req.url}`);
+    res.status(404).json({ 
+        error: 'API route not found', 
+        method: req.method, 
+        url: req.url 
+    });
 });
 
-// Fallback to index.html for SPA-like behavior (only for GET)
+// Fallback to index.html for SPA (only for GET)
 app.get('*', (req, res) => {
     const indexPath = path.join(__dirname, 'public', 'index.html');
     if (fs.existsSync(indexPath)) {
         res.sendFile(indexPath);
     } else {
-        res.status(404).send('index.html not found in public directory');
+        res.status(404).json({ error: 'index.html not found, the build might be incomplete' });
     }
 });
 
