@@ -105,9 +105,20 @@ app.get('/api/users', (req, res) => {
     }
 });
 
-// Fallback to index.html for SPA-like behavior (optional, but good)
+// API 404 Handler - Ensure /api requests return JSON, not HTML
+app.all('/api/*', (req, res) => {
+    console.log(`404 API Error: ${req.method} ${req.url}`);
+    res.status(404).json({ error: `API Route ${req.method} ${req.url} not found` });
+});
+
+// Fallback to index.html for SPA-like behavior (only for GET)
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    const indexPath = path.join(__dirname, 'public', 'index.html');
+    if (fs.existsSync(indexPath)) {
+        res.sendFile(indexPath);
+    } else {
+        res.status(404).send('index.html not found in public directory');
+    }
 });
 
 app.listen(PORT, () => {
