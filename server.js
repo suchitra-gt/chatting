@@ -43,6 +43,7 @@ app.get('/api/health', (req, res) => {
 // API Routes
 app.post('/api/register', (req, res) => {
     const data = req.body;
+    console.log('📝 REGISTER ATTEMPT:', data);
     if (!data.username || !data.password || !data.email || !data.phone) {
         return res.status(400).json({ error: 'Please provide username, email, phone, and password' });
     }
@@ -85,6 +86,7 @@ app.get('/api/messages', (req, res) => {
 
 app.post('/api/messages', (req, res) => {
     const data = req.body;
+    console.log('💬 MESSAGE ATTEMPT:', data);
     if (!data.senderId || !data.text || !data.recipientId) {
         return res.status(400).json({ error: 'Invalid message data' });
     }
@@ -146,7 +148,7 @@ app.use((err, req, res, next) => {
     res.status(500).json({ 
         error: 'Internal Server Error', 
         message: err.message,
-        stack: process.env.NODE_ENV === 'development' ? err.stack : undefined 
+        stack: err.stack // Always provide stack for debugging
     });
 });
 
